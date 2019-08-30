@@ -6,15 +6,20 @@ remote-train:
 	zip -u paperspace.zip .env
 	gradient jobs create \
 		--name "image colorization train" \
-		--machineType "P5000" \
+		--machineType "P4000" \
 		--container "tomikeska/ml-box" \
 		--workspaceArchive paperspace.zip \
-		--ports $(TB_PORT):$(TB_PORT) \
 		--command "make train"
 
 train:
 	pip3 install -r requirements.txt
-	python3 src/train.py
+	python3 src/train.py \
+		--train-dataset=/storage/datasets/imagenet/train/ \
+		--test-dataset=/storage/datasets/imagenet/val/ \
+		--batch-size=128 \
+		--img-w=64 \
+		--img-h=64 \
+		--model-save-path=/artifacts/
 
 local-train:
 	python src/train.py
