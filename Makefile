@@ -16,18 +16,10 @@ train:
 	python3 src/train.py \
 		--train-dataset=/storage/datasets/imagenet/train/ \
 		--test-dataset=/storage/datasets/imagenet/val/ \
-<<<<<<< HEAD
-		--batch-size=128 \
-		--img-w=64 \
-		--img-h=64 \
+		--batch-size=64 \
+		--img-w=128 \
+		--img-h=128 \
 		--model-save-path=/artifacts/
-=======
-		--batch-size=16 \
-		--img-w=64 \
-		--img-h=64 \
-		--model-save-path=/artifacts/
-
->>>>>>> 9ff32955107eabe25fa767e0b61893c9784382db
 
 local-train:
 	python src/train.py

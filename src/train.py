@@ -19,6 +19,8 @@ def train(model, args, experiment=None):
                                    img_size=(args.img_w, args.img_h))
     model.compile(optimizer=Adam(lr=0.0002),
                   loss=create_feature_loss(input_shape=(args.img_h, args.img_w, 3)))
+    if args.weights:
+        model.load_weights(args.weights)
     model.summary()
 
     callbacks = [
@@ -65,6 +67,9 @@ if __name__ == '__main__':
                         type=int,
                         default=256,
                         help='Image height')
+    parser.add_argument('--weights',
+                        type=str,
+                        help='Model weights')
     parser.add_argument('--epochs',
                         type=int,
                         default=100,
