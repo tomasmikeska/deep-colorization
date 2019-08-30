@@ -1,6 +1,7 @@
 # WIP Deep colorization
 
-Implementation of deep learning model in Keras for image colorization.
+Implementation of deep learning model in Keras for image colorization. Project uses U-Net with ResNet34 encoder,
+PixelShuffle upsample layers with ICNR initialization and feature loss from [Perceptual Losses for Real-Time Style Transfer and Super-Resolution](https://arxiv.org/abs/1603.08155) instead of usual MAE or MSE.
 
 #### Requirements
 
