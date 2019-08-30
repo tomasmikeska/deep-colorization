@@ -4,7 +4,10 @@ import imagesize
 from itertools import cycle
 from PIL import Image
 from sklearn.utils import shuffle
+<<<<<<< HEAD
 from skimage.color import rgb2gray
+=======
+>>>>>>> 9ff32955107eabe25fa767e0b61893c9784382db
 from keras.utils import to_categorical, Sequence
 from keras.preprocessing.image import ImageDataGenerator
 from utils import dir_listing, file_listing, take

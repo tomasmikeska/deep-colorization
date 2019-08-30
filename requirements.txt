@@ -30,7 +30,6 @@ h5py==2.9.0
 halo==0.0.28
 hyperopt==0.1.2
 idna==2.8
-image-classifiers==0.2.0
 imageio==2.5.0
 imagesize==1.1.0
 Jinja2==2.10.1
