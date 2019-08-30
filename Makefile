@@ -26,3 +26,6 @@ local-train:
 
 test:
 	PYTHONPATH=src/ python -m pytest tests/
+
+lint:
+	python -m pycodestyle src/

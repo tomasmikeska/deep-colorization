@@ -69,7 +69,7 @@ def take(gen, n):
     Returns:
         List of values from generator
     '''
-    l = []
+    lst = []
     for _ in range(n):
-        l.append(next(gen))
-    return l
+        lst.append(next(gen))
+    return lst
