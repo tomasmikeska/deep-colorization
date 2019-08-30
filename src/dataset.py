@@ -36,37 +36,6 @@ def read_image(path, size=(256, 256)):
         return None
 
 
-def rgb_to_lab(img_np):
-    '''
-    Convert RGB image to AB channels of CIE L*a*b color space.
-
-    Args:
-        img_np (numpy array): RGB image numpy array, shape (w, h, 3), range (-1, 1)
-
-    Returns:
-        Numpy array with shape (w, h, 3), format (L, A, B), range (-1, 1)
-    '''
-    output = np.empty_like(img_np)
-    img_lab = skimage.color.rgb2lab(img_np / 2. + 0.5)
-    output[:,:,0] = img_lab[:,:,0] / 50. - 1.
-    output[:,:,1:] = img_lab[:,:,1:] / 127.
-    return output
-
-
-def lab_to_rgb(img_l, img_ab):
-    '''
-    Convert a pair of numpy arrays (l channel and ab channels) into an RGB image
-
-    Args:
-        img_l (numpy array): Lightness image numpy array, shape (w, h), range (-1, 1)
-        img_ab (numpy array): CIE ab channels, shape (w, h), range (-1, 1)
-    '''
-    lab = np.empty(img_l.shape[:2] + (3,))
-    lab[:, :, 0] = np.squeeze(((img_l + 1) * 50))
-    lab[:, :, 1:] = img_ab * 127.
-    return skimage.color.lab2rgb(lab) * 2 - 1
-
-
 class TrainDatasetSequence(Sequence):
 
     def __init__(self, base_train_path, batch_size=128, img_size=None):
@@ -97,9 +66,6 @@ class TrainDatasetSequence(Sequence):
                 continue
             count += 1
             # img_rgb = self.augment_image(img_rgb)
-            # img_lab = rgb_to_lab(img_rgb)
-            # X.append(np.repeat(img_lab[:,:,:1], 3, axis=-1))
-            # y.append(img_lab[:,:,1:])
             img_gray = rgb2gray(img_rgb).reshape(self.img_size + (1,))
             X.append(np.repeat(img_gray, 3, axis=-1))
             y.append(img_rgb)
@@ -126,9 +92,6 @@ class TestDatasetSequence(Sequence):
             if img_rgb is None:
                 continue
             count += 1
-            # img_lab = rgb_to_lab(img_rgb)
-            # X.append(np.repeat(img_lab[:,:,:1], 3, axis=-1))
-            # y.append(img_lab[:,:,1:])
             img_gray = rgb2gray(img_rgb).reshape(self.img_size + (1,))
             X.append(np.repeat(img_gray, 3, axis=-1))
             y.append(img_rgb)

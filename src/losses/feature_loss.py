@@ -1,3 +1,10 @@
+'''
+Implementation of perceptual loss from paper Perceptual Losses for Real-Time Style Transfer and Super-Resolution
+(link: https://arxiv.org/abs/1603.08155)
+
+It measures distance (L1 distance in our case) between output of several layers of VGG16 pretrained model
+for ground truth and output images.
+'''
 import keras.backend as K
 from keras.models import Model
 from keras.layers import MaxPooling2D

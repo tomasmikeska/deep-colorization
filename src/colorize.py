@@ -6,7 +6,6 @@ from dataset import read_image, rgb_to_lab, lab_to_rgb
 
 
 def colorize(img_path, model, img_size):
-    # img_l   = rgb_to_lab(read_image(img_path, size=img_size))[:,:,0:1]  # Take only the lightness channel
     img_rgb  = read_image(img_path, size=img_size)
     img_gray = skimage.color.rgb2gray(img_rgb).reshape(img_size + (1,))
     pred     = model.predict(np.repeat(img_gray, 3, axis=-1))

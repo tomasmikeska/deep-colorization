@@ -6,6 +6,12 @@ from layers.pixel_shuffle import PixelShuffle
 
 
 def get_hook_indexes(model):
+    '''
+    Get indexes of layers that change feature map height (except padding layers)
+
+    Args:
+        model (keras model): Keras model that will be searched. Input shape have to be specified, not None.
+    '''
     hook_idxs = []
     for i in range(1, len(model.layers)):
         if model.layers[i - 1].output_shape[1] != model.layers[i].output_shape[1]:
@@ -54,14 +60,16 @@ def unet_block(x, y, filters=64):
     return x
 
 
-def Unet(encoder, fusion_dim=None):
+def Unet(encoder):
+    '''
+    Automatically construct U-Net from given encoder part.
+
+    Args:
+        encoder (keras model): Down-sampling U-Net model
+    '''
     hook_idxs = get_hook_indexes(encoder)
     enc = encoder.output
 
-    if fusion_dim is not None:
-        enc = Conv2D(fusion_dim, 1, name='fusion_conv')(enc)
-        enc = BatchNormalization()(enc)
-        enc = ReLU()(enc)
     x = conv_block(enc, filters=K.int_shape(enc)[-1])
 
     for i, hook_idx in enumerate(hook_idxs):

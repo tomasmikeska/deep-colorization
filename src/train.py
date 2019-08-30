@@ -19,9 +19,10 @@ def train(model, args, experiment=None):
                                    img_size=(args.img_w, args.img_h))
     model.compile(optimizer=Adam(lr=0.0002),
                   loss=create_feature_loss(input_shape=(args.img_h, args.img_w, 3)))
+    model.summary()
+
     if args.weights:
         model.load_weights(args.weights)
-    model.summary()
 
     callbacks = [
         TerminateOnNaN(),
@@ -86,7 +87,5 @@ if __name__ == '__main__':
                                 project_name=os.getenv('COMET_PROJECTNAME'),
                                 workspace=os.getenv('COMET_WORKSPACE'))
     # Train
-    model = build_model(args.img_w, args.img_h,
-                        pretrained_encoder=False,
-                        freeze_encoder=False)
+    model = build_model(args.img_w, args.img_h)
     train(model, args, experiment)
