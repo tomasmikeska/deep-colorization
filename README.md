@@ -3,7 +3,6 @@
 Implementation of deep learning model in Keras for image colorization. Project uses U-Net trained as Self-Attention GAN together with Perceptual loss instead of usual MAE or MSE. Model was trained for 15 hours on NVIDIA Quadro P5000 on subset of ImageNet (0.5M images). First I trained it in 64x64 resolution followed by one epoch in 128x128. Work is still in progress.
 
 ![](assets/preview.png)
-<br>*Original images - left, colorized - right*
 
 #### Requirements
 
