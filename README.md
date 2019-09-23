@@ -1,7 +1,11 @@
-# WIP Deep colorization
+# Deep colorization
 
-Implementation of deep learning model in Keras for image colorization. Project uses U-Net with ResNet34 encoder,
-PixelShuffle upsample layers with ICNR initialization and feature loss from [Perceptual Losses for Real-Time Style Transfer and Super-Resolution](https://arxiv.org/abs/1603.08155) instead of usual MAE or MSE.
+Implementation of deep learning model in Keras for image colorization. Project uses U-Net trained as Self-Attention GAN together with Perceptual loss instead of usual MAE or MSE. Model was trained for 15 hours on NVIDIA Quadro P5000 on subset of ImageNet (0.5M images). First I trained it in 64x64 resolution followed by one epoch in 128x128. Work is still in progress.
+
+![](assets/woman.jpg)
+![](assets/car.jpg)
+![](assets/city.jpg)
+![](assets/landscape.jpg)
 
 #### Requirements
 
