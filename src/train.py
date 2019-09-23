@@ -3,11 +3,11 @@ import argparse
 from comet_ml import Experiment
 from keras.callbacks import ModelCheckpoint, TerminateOnNaN
 from keras.optimizers import Adam
-from model import build_model
-from losses.feature_loss import create_feature_loss
+from models.fusion_unet_v2 import FusionUNet
+from losses.perceptual_loss import perceptual_loss
 from dataset import TrainDatasetSequence, TestDatasetSequence
 from callbacks.log_images import LogImages
-from utils import relative_path
+from utils import relative_path, file_listing
 
 
 def train(model, args, experiment=None):
@@ -18,22 +18,22 @@ def train(model, args, experiment=None):
                                    batch_size=args.batch_size,
                                    img_size=(args.img_w, args.img_h))
     model.compile(optimizer=Adam(lr=0.0002),
-                  loss=create_feature_loss(input_shape=(args.img_h, args.img_w, 3)))
+                  loss=perceptual_loss(input_shape=(args.img_h, args.img_w, 3)))
     model.summary()
 
     if args.weights:
         model.load_weights(args.weights)
 
     callbacks = [
-        TerminateOnNaN(),
         ModelCheckpoint(
-            args.model_save_path + 'unet_{epoch:02d}_{val_loss:.3f}.h5',
+            args.model_save_path + 'fusion_unet_{epoch:02d}_{val_loss:.3f}.h5',
             save_weights_only=True,
-            verbose=1)
+            verbose=1),
+        TerminateOnNaN()
     ]
     if experiment is not None:
         callbacks.append(LogImages(experiment,
-                                   paths=train_seq.paths[:10] + test_seq.paths[:10],
+                                   paths=file_listing(args.validation_path),
                                    img_size=(args.img_w, args.img_h)))
 
     model.fit_generator(
@@ -50,12 +50,16 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Train a colorization deep learning model')
     parser.add_argument('--train-dataset',
                         type=str,
-                        default=relative_path('../data/imagenet-sample/'),
+                        default=relative_path('../data/imagenet-sample/train/'),
                         help='Train dataset base path. Folder should contain subfolder for each class.')
     parser.add_argument('--test-dataset',
                         type=str,
-                        default=relative_path('../data/imagenet-sample/'),
+                        default=relative_path('../data/imagenet-sample/test/'),
                         help='Test dataset base path. Folder should contain images directly.')
+    parser.add_argument('--validation-path',
+                        type=str,
+                        default=relative_path('../data/imagenet-sample/val/'),
+                        help='Path to directory with validation images that will be uploaded to comet after each epoch')
     parser.add_argument('--batch-size',
                         type=int,
                         default=128,
@@ -87,5 +91,5 @@ if __name__ == '__main__':
                                 project_name=os.getenv('COMET_PROJECTNAME'),
                                 workspace=os.getenv('COMET_WORKSPACE'))
     # Train
-    model = build_model(args.img_w, args.img_h)
+    model = FusionUNet((args.img_h, args.img_w, 3))
     train(model, args, experiment)
