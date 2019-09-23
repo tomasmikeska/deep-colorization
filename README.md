@@ -16,7 +16,7 @@ Install pip packages using
 $ pip install -r requirements.txt
 ```
 
-Add .env file to project root with environmental variables
+Add `.env` file to project root with environmental variables
 ```
 COMET_PROJECTNAME={comet_project_name}
 COMET_WORKSPACE={comet_workspace}
@@ -38,10 +38,10 @@ docker pull tomikeska/ml-box
 
 Train model using command
 ```
-$ python src/train.py
+$ python src/train_gan.py
 ```
 
 Colorize image using trained weights
 ```
-$ python src/colorize.py --model model/weights.h5 --source source.jpg --output output.jpg
+$ python src/colorize.py --weights model/weights.h5 --source source.jpg --output output.jpg
 ```
