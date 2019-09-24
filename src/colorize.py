@@ -3,13 +3,13 @@ import numpy as np
 import argparse
 import skimage
 from keras.models import load_model
-from models.fusion_unet import FusionUNet
+from models.att_unet import AttentionUNet
 from dataset import read_image
 
 
 def build_model(args):
     if args.weights:
-        model = FusionUNet((args.img_h, args.img_w, 3))
+        model = AttentionUNet((args.img_h, args.img_w, 3))
         model.load_weights(args.weights)
         return model
     elif args.model:
