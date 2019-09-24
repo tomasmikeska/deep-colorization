@@ -144,7 +144,7 @@ def train(args, experiment=None):
             # Save model
             if batch_idx % LOG_PERIOD == 0:
                 step = (batch_idx + epoch * len(train_seq)) / 1000
-                save_path = f'{args.model_save_path}/gan_{args.img_w}x{args.img_h}_epoch-{epoch}_{batch_idx / 1000}K.h5'
+                save_path = f'{args.model_save_path}/gan_{args.img_w}x{args.img_h}_epoch-{epoch}_{step}K.h5'
                 gan.save_weights(save_path)
 
 
