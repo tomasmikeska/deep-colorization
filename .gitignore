@@ -113,3 +113,4 @@ data/*
 tb_logs/
 *.zip
 notebooks/*
+output.jpg

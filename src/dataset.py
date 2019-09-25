@@ -50,8 +50,9 @@ def read_image(path, size=None, keep_ratio=False):
             img_np = resize_keep_ratio(img_np)
         elif size and not keep_ratio:
             img_np = skimage.transform.resize(img_np, size) * 255
-        if img_np.ndim != 3 or img_np.shape[2] != 3:
-            return None
+        if img_np.ndim == 2 or img_np.shape[2] == 1:
+            img_np = np.reshape(img_np, (img_np.shape[0], img_np.shape[1], 1))
+            img_np = np.repeat(img_np, 3, axis=-1)
         return img_np / 127.5 - 1
     except Exception:
         return None

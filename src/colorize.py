@@ -64,15 +64,15 @@ if __name__ == '__main__':
                         help='Source image path, either grayscale or rgb')
     parser.add_argument('--output',
                         type=str,
-                        default='output.jpeg',
+                        default='output.jpg',
                         help='Output image path')
     parser.add_argument('--img-w',
                         type=int,
-                        default=256,
+                        default=192,
                         help='Input image width to use as model input dim')
     parser.add_argument('--img-h',
                         type=int,
-                        default=256,
+                        default=192,
                         help='Input image height to use as model input dim')
     parser.add_argument('--show-original',
                         type=bool,
