@@ -41,7 +41,7 @@ def build_gan(img_size,
     gan = Model(img_input, [generated_imgs, discriminator(generated_imgs)])
     gan.compile(optimizer=Adam(0.0001, 0.5),
                 loss=[perceptual_loss(input_shape=(*img_size, 3)), 'binary_crossentropy'],
-                loss_weights=[10, 1])
+                loss_weights=[1, 5])
     if gan_weights:
         gan.load_weights(gan_weights)
     discriminator.trainable = True
@@ -143,8 +143,9 @@ def train(args, experiment=None):
             on_batch_end(batch_idx, None)
             # Save model
             if batch_idx % LOG_PERIOD == 0:
-                save_path = f'{args.model_save_path}/gan_{args.img_w}x{args.img_h}_epoch-{epoch}_{batch_idx / 1000}K.h5'
-                gan.save_weights(save_path)
+                path_suffix = f'{args.img_w}x{args.img_h}_epoch-{epoch + 1}_{int(batch_idx / 1000)}K.h5'
+                gan.save_weights(f'{args.model_save_path}/gan_{path_suffix}')
+                generator.save_weights(f'{args.model_save_path}/generator_{path_suffix}')
 
 
 if __name__ == '__main__':

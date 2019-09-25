@@ -32,7 +32,7 @@ def resize_keep_ratio(img_np, size):
         return None
 
 
-def read_image(path, size=(256, 256), keep_ratio=False):
+def read_image(path, size=None, keep_ratio=False):
     '''
     Read image from specified path and resize it if size specified
 
@@ -50,7 +50,7 @@ def read_image(path, size=(256, 256), keep_ratio=False):
             img_np = resize_keep_ratio(img_np)
         elif size and not keep_ratio:
             img_np = skimage.transform.resize(img_np, size) * 255
-        if img_np.shape != (*size, 3):
+        if img_np.ndim != 3 or img_np.shape[2] != 3:
             return None
         return img_np / 127.5 - 1
     except Exception:

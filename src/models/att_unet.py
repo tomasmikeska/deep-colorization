@@ -29,14 +29,7 @@ def up_block(x, y, filters=64, batch_norm=False):
     return x
 
 
-def is_power2(num):
-    '''Check if number is power of 2 (e.g. 2, 4, 8, 16, ...)'''
-    return (num & (num - 1)) == 0
-
-
 def AttentionUNet(input_shape=(64, 64, 3)):
-    assert is_power2(input_shape[0]) and is_power2(input_shape[1]), 'Input size must be power of 2'
-
     img_input = Input(shape=input_shape)
 
     # Encoder

@@ -18,7 +18,7 @@ remote-train-gan:
 	gradient jobs create \
 		--name "image colorization train GAN" \
 		--projectId "pryqks47v" \
-		--machineType "P5000" \
+		--machineType "P6000" \
 		--container "tomikeska/ml-box" \
 		--workspaceArchive paperspace.zip \
 		--command "make train-gan"
@@ -51,10 +51,11 @@ train-gan:
 	python3 src/train_gan.py \
 		--train-dataset=/storage/datasets/imagenet/train/ \
 		--validation-path=/storage/datasets/colorization-val/ \
-		--batch-size=64 \
-		--img-w=128 \
-		--img-h=128 \
-		--gan-weights=/storage/gan_64x64_epoch-2_30K.h5
+		--batch-size=32 \
+		--img-w=192 \
+		--img-h=192 \
+		--epoch=1 \
+		--gan-weights=/storage/gan_128x128_epoch-1_15K.h5 \
 		--model-save-path=/artifacts/
 
 pretrain-discriminator:
