@@ -2,6 +2,10 @@
 
 Implementation of deep learning model in Keras for image colorization. Project uses U-Net trained as Self-Attention GAN together with Perceptual loss instead of usual MAE or MSE. Work is still in progress.
 
+---
+
+### Latest Examples
+
 ![](https://i.imgur.com/DtH3dB7.jpg)
 *"The Roaring Lion", Winston Churchill's iconic portrait, 1941*
 
@@ -17,12 +21,14 @@ Implementation of deep learning model in Keras for image colorization. Project u
 ![](https://i.imgur.com/Pn1hB8c.jpg)
 *Metropolis (movie), 1927*
 
-#### Requirements
+---
+
+### Requirements
 
 - Python 3.x
 - pip
 
-#### Installation and setup
+### Installation and setup
 
 Install pip packages using
 ```
@@ -47,7 +53,7 @@ or get it from Docker Hub
 docker pull tomikeska/ml-box
 ```
 
-#### Usage
+### Usage
 
 Train model using command
 ```
@@ -59,6 +65,6 @@ Colorize image using trained weights
 $ python src/colorize.py --weights model/weights.h5 --source source.jpg --output output.jpg
 ```
 
-#### License
+### License
 
 Code is released under the MIT License. Please see the LICENSE file for details.
