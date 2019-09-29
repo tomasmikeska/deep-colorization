@@ -6,20 +6,30 @@ Implementation of deep learning model in Keras for image colorization. Project u
 
 ### Latest Examples
 
-![](https://i.imgur.com/DtH3dB7.jpg)
+Historical photos
+
+![](https://i.imgur.com/64DjM7E.jpg)
 *"The Roaring Lion", Winston Churchill's iconic portrait, 1941*
 
-![](https://i.imgur.com/l07LMpu.jpg)
+![](https://i.imgur.com/bTGzCDg.jpg)
 *Lower Manhattan’s Classic Skyline Seen Aerially From Battery Park, 1956*
 
-![](https://i.imgur.com/Tn18lcl.jpg)
+![](https://i.imgur.com/trLCobT.jpg)
 *"Migrant Mother" by Dorothea Lange, 1936*
 
-![](https://i.imgur.com/54qgUBl.jpg)
+![](https://i.imgur.com/bTGzCDg.jpg)
 *NYC street vintage photo*
 
-![](https://i.imgur.com/Pn1hB8c.jpg)
+![](https://i.imgur.com/EzJFUJq.jpg)
 *Metropolis (movie), 1927*
+
+Original RGB images (left) converted to grayscale and colorized (right)
+
+![](https://i.imgur.com/CYgH4K3.jpg)
+
+![](https://i.imgur.com/hV4wsDE.jpg)
+
+![](https://i.imgur.com/Yskc3iL.jpg)
 
 ---
 

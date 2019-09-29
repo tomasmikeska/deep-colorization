@@ -43,7 +43,7 @@ class LogImages(Callback):
             ground_truth.append(img_rgb)
             img_gray = rgb2gray(img_rgb).reshape(self.img_size + (1,))
             batch.append(img_gray)
-        # Predict AB channels
+        # Predict color using trained model
         colorized = self.model.predict(np.repeat(batch, 3, axis=-1))
         # Concat ground truth and predicted images and log them to comet
         for i in range(len(colorized)):
