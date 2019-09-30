@@ -17,7 +17,7 @@ Historical photos
 ![](https://i.imgur.com/trLCobT.jpg)
 *"Migrant Mother" by Dorothea Lange, 1936*
 
-![](https://i.imgur.com/bTGzCDg.jpg)
+![](https://i.imgur.com/G6tSaaW.jpg)
 *NYC street vintage photo*
 
 ![](https://i.imgur.com/EzJFUJq.jpg)
