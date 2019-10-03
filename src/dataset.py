@@ -1,7 +1,8 @@
 import numpy as np
 import skimage
-import imagesize
+import random
 from itertools import cycle
+from functools import partial
 from PIL import Image
 from sklearn.utils import shuffle
 from skimage.color import rgb2gray
@@ -58,21 +59,78 @@ def read_image(path, size=None, keep_ratio=False):
         return None
 
 
+def add_noise(X, noise_count=None, noise_range=30):
+    '''
+    Add randomly distributed noise to images
+
+    Args:
+        X (numpy): batch of images
+        noise_count (number): Number of pixels in each image to change
+        noise_range (number): Range of random values to add/subtract from selected pixels
+    '''
+    for img_np in X:
+        for _ in range(noise_count if noise_count else img_np.shape[0] * 2):
+            xx = random.randrange(img_np.shape[1])
+            yy = random.randrange(img_np.shape[0])
+
+            img_np[yy][xx][0] += random.randrange(-noise_range, noise_range) / 127.5
+            img_np[yy][xx][1] += random.randrange(-noise_range, noise_range) / 127.5
+            img_np[yy][xx][2] += random.randrange(-noise_range, noise_range) / 127.5
+
+    return X
+
+
+def take(n, arr, extract_fn=None):
+    '''
+    Helper to take N elements from array, skipping None
+
+    Args:
+        n (int): Number of elements to take
+        arr (list): List of elements
+        extract_fn (function): Function that is used to transform item from array, takes item as the only parameter
+    '''
+    output = []
+    count = 0
+
+    for item in cycle(arr):
+        if item is None:
+            continue
+        if extract_fn:
+            item = extract_fn(item)
+        output.append(item)
+        count += 1
+        if count >= n:
+            return output
+
+
+def read_batch(idx, paths, batch_size=32, img_size=(48, 48)):
+    '''
+    Read batch tuple (X, y) on index idx from paths. X are grayscale images, y are target RGB images
+
+    Args:
+        idx (number): Index of batch to take
+        paths (list): List of paths to read
+        batch_size (number): Batch size - number of tuples to read
+        img_size (tuple): Images size after squarification, in (W, H) format
+    '''
+    X, y = [], []
+
+    for img_rgb in take(batch_size, paths[idx * batch_size:], extract_fn=partial(read_image, size=img_size)):
+        img_gray = rgb2gray(img_rgb).reshape(img_size + (1,))
+        X.append(np.repeat(img_gray, 3, axis=-1))
+        y.append(img_rgb)
+
+    return np.array(X), np.array(y)
+
+
 class TrainDatasetSequence(Sequence):
     def __init__(self,
                  base_train_path,
                  batch_size=128,
-                 img_size=(256, 256),
-                 augment=False):
+                 img_size=(256, 256)):
         self.batch_size = batch_size
         self.paths      = shuffle(self._get_image_paths(base_train_path))
         self.img_size   = img_size
-        self.augment    = augment
-        self.augment_fn = ImageDataGenerator(rotation_range=5,
-                                             brightness_range=[0.9, 1.1],
-                                             shear_range=0.05,
-                                             zoom_range=0.05,
-                                             horizontal_flip=True).random_transform
 
     def _get_image_paths(self, base_path):
         image_paths = []
@@ -84,25 +142,16 @@ class TrainDatasetSequence(Sequence):
         return len(self.paths) // self.batch_size
 
     def __getitem__(self, idx):
-        X, y = [], []
-        count = 0
-        for image_path in cycle(self.paths[idx * self.batch_size:]):
-            img_rgb = read_image(image_path, size=self.img_size)
-            if img_rgb is None:
-                continue
-            count += 1
-            if self.augment:
-                img_rgb = self.augment_fn(img_rgb)
-            img_gray = rgb2gray(img_rgb).reshape(self.img_size + (1,))
-            X.append(np.repeat(img_gray, 3, axis=-1))
-            y.append(img_rgb)
-            if count >= self.batch_size:
-                break
-        return np.array(X), np.array(y)
+        X, y = read_batch(idx, self.paths, self.batch_size, self.img_size)
+        X = add_noise(X)  # Add noise to stabilize results
+        return X, y
 
 
 class TestDatasetSequence(Sequence):
-    def __init__(self, base_test_path, batch_size=128, img_size=(256, 256)):
+    def __init__(self,
+                 base_test_path,
+                 batch_size=128,
+                 img_size=(256, 256)):
         self.batch_size = batch_size
         self.paths      = file_listing(base_test_path, extension='JPEG')
         self.img_size   = img_size
@@ -111,16 +160,4 @@ class TestDatasetSequence(Sequence):
         return len(self.paths) // self.batch_size
 
     def __getitem__(self, idx):
-        X, y = [], []
-        count = 0
-        for image_path in cycle(self.paths[idx * self.batch_size:(idx + 1) * self.batch_size]):
-            img_rgb = read_image(image_path, size=self.img_size)
-            if img_rgb is None:
-                continue
-            count += 1
-            img_gray = rgb2gray(img_rgb).reshape(self.img_size + (1,))
-            X.append(np.repeat(img_gray, 3, axis=-1))
-            y.append(img_rgb)
-            if count >= self.batch_size:
-                break
-        return np.array(X), np.array(y)
+        return read_batch(idx, self.paths, self.batch_size, self.img_size)
